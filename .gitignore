@@ -1,0 +1,12 @@
+syntax: glob
+*.user
+plugin/Makefile*
+plugin/debug
+plugin/release
+install
+env.bat
+*.moc
+*.obj
+*.rcc*
+*.DS_Store
+*.directory

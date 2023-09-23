@@ -1,0 +1,16 @@
+{
+    "Name" : "Rusty",
+    "Version" : "0.0.1",
+    "CompatVersion" : "0.0.1",
+    "Vendor" : "Steinzone - Gerhard Stein",
+    "Copyright" : "(C) Steinzone",
+    "License" : "Put short license information here",
+    "Description" : "Put a short description of your plugin here",
+    "Url" : "https://www.steinzone.de",
+    "Dependencies" : [
+        { "Name" : "Core", "Version" : "11.0.82" },
+        { "Name" : "LanguageClient", "Version" : "11.0.82" },
+        { "Name" : "ProjectExplorer", "Version" : "11.0.82" },
+        { "Name" : "TextEditor", "Version" : "11.0.82" }
+    ]
+}

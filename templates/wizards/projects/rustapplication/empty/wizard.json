@@ -1,0 +1,51 @@
+{
+    "version": 1,
+    "supportedProjectTypes": [ "RustProject" ],
+    "id": "F.RustApplicationEmpty",
+    "category": "F.ApplicationRsSide",
+    "trDescription": "Creates an empty Rust application that contains only the main code for a QApplication.",
+    "trDisplayName": "Empty Application",
+    "trDisplayCategory": "Application (Rust)",
+    "icon": "icon.png",
+    "iconKind": "Themed",
+    "enabled": "%{JS: value('Plugins').indexOf('Rusty') >= 0 && (!value('Platform').length || ['Desktop', 'DockerDeviceType', 'GenericLinuxOsType'].includes(value('Platform')))}",
+
+    "options":
+    [
+        { "key": "SrcFileName", "value": "%{ProjectDirectory}/src/main.rs" },
+        { "key": "RsProjectFile", "value": "%{ProjectDirectory}/Cargo.toml" }
+    ],
+
+    "pages":
+    [
+        {
+            "trDisplayName": "Project Location",
+            "trShortTitle": "Location",
+            "typeId": "Project"
+        },
+        {
+            "trDisplayName": "Project Management",
+            "trShortTitle": "Summary",
+            "typeId": "Summary"
+        }
+    ],
+    "generators":
+    [
+        {
+            "typeId": "File",
+            "data":
+            [
+                {
+                    "source": "../Cargo.toml",
+                    "target": "%{RsProjectFile}",
+                    "openAsProject": true
+                },
+                {
+                    "source": "../main.rs",
+                    "target": "%{SrcFileName}",
+                    "openInEditor": true
+                }
+            ]
+        }
+    ]
+}
