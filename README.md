@@ -1,6 +1,15 @@
 # Rusty
 
+This plugins extends QtCreator to support the Rust language
+
 ## How to Build
+
+In order to build this plugin you need to get the qtcreator sources. You can easily do this by:
+
+    git submodule init
+    git submodule update
+
+It is also recommended to build that qtcreator if you happen to have problems with your currently installed one.
 
 Create a build directory and run
 

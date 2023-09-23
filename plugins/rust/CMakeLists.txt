@@ -39,7 +39,7 @@ add_qtc_plugin(Rusty
     QtCreator::QmlJSEditor
     QtCreator::QmlJSTools
   SOURCES
-    README.md
+    ../../README.md
     rusty.cpp
     rusty.h
     rusty_global.h
