@@ -314,7 +314,7 @@ class InterpreterOptionsPage : public Core::IOptionsPage
 public:
     InterpreterOptionsPage()
     {
-        setId(Constants::C_PYTHONOPTIONS_PAGE_ID);
+        setId(Constants::C_RUSTOPTIONS_PAGE_ID);
         setDisplayName(Tr::tr("Interpreters"));
         setCategory(Constants::C_RUST_SETTINGS_CATEGORY);
         setDisplayCategory(Tr::tr("Python"));

@@ -68,6 +68,7 @@ target_sources(Rusty
     rustformattoken.h
     rustindenter.h rustindenter.cpp
     rustutils.cpp
+    rsside.cpp
 )
 
 

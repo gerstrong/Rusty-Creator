@@ -9,11 +9,11 @@ const char MENU_ID[] = "Rusty.Menu";
 const char RUST_LANGUAGE_ID[] = "Rust";
 
 const char C_RUSTEDITOR_ID[] = "RustEditor.RustEditor";
-const char C_RUSTRUNCONFIGURATION_ID[] = "RustEditor.RunConfiguration.Rustrun";
+const char C_RUSTRUNCONFIGURATION_ID[] = "RustEditor.RunConfiguration.";
 
 const char C_EDITOR_DISPLAY_NAME[] = QT_TRANSLATE_NOOP("QtC::Core", "Rust Editor");
 
-const char C_PYTHONOPTIONS_PAGE_ID[] = "RustEditor.OptionsPage";
+const char C_RUSTOPTIONS_PAGE_ID[] = "RustEditor.OptionsPage";
 const char C_PYLSCONFIGURATION_PAGE_ID[] = "RustEditor.RustLanguageServerConfiguration";
 const char C_RUST_SETTINGS_CATEGORY[] = "R.Rust";
 
@@ -26,7 +26,7 @@ const char RSLS_SETTINGS_ID[] = "Rust.RsLSSettingsID";
 /*******************************************************************************
  * MIME type
  ******************************************************************************/
-const char C_RS_MIMETYPE[] = "text/x-rust";
+const char C_RS_MIMETYPE[] = "text/rust";
 const char C_TOML_MIMETYPE[] = "text/plain";
 const char C_PY_MIME_ICON[] = "text-x-rust";
 

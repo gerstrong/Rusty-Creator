@@ -67,6 +67,11 @@ RustyPlugin::~RustyPlugin()
     delete d;
 }
 
+RustyPlugin *RustyPlugin::instance()
+{
+    return m_instance;
+}
+
 bool RustyPlugin::initialize(const QStringList &arguments, QString *errorString)
 {
     // Register objects in the plugin manager's object pool

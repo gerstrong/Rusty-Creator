@@ -17,7 +17,7 @@ class RsSideInstaller : public QObject
 
 public:
     static RsSideInstaller *instance();
-    static void checkPySideInstallation(const Utils::FilePath &python,
+    static void checkRsSideInstallation(const Utils::FilePath &python,
                                         TextEditor::TextDocument *document);
 
 signals:
@@ -28,15 +28,15 @@ private:
 
     void installRsside(const Utils::FilePath &python,
                        const QString &rsSide, TextEditor::TextDocument *document);
-    void handlePySideMissing(const Utils::FilePath &python,
+    void handleRsSideMissing(const Utils::FilePath &python,
                              const QString &pySide,
                              TextEditor::TextDocument *document);
 
-    void runPySideChecker(const Utils::FilePath &python,
+    void runRsSideChecker(const Utils::FilePath &python,
                           const QString &pySide,
                           TextEditor::TextDocument *document);
-    static bool missingPySideInstallation(const Utils::FilePath &python, const QString &pySide);
-    static QString importedPySide(const QString &text);
+    static bool missingRsSideInstallation(const Utils::FilePath &python, const QString &pySide);
+    static QString importedRsSide(const QString &text);
 
     QHash<Utils::FilePath, QList<TextEditor::TextDocument *>> m_infoBarEntries;
 };

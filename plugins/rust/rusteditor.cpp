@@ -105,7 +105,7 @@ public:
             return;
 
         RsLSConfigureAssistant::openDocumentWithPython(rust, this);
-        RsSideInstaller::checkPySideInstallation(rust, this);
+        RsSideInstaller::checkRsSideInstallation(rust, this);
     }
 };
 
@@ -274,7 +274,7 @@ void RustEditorWidget::updateInterpretersSelector()
     }
     auto settingsAction = menu->addAction(Tr::tr("Manage Python Interpreters"));
     connect(settingsAction, &QAction::triggered, this, []() {
-        Core::ICore::showOptionsDialog(Constants::C_PYTHONOPTIONS_PAGE_ID);
+        Core::ICore::showOptionsDialog(Constants::C_RUSTOPTIONS_PAGE_ID);
     });
 }
 

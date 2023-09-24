@@ -18,7 +18,7 @@
 namespace Rusty::Internal {
 
 /**
- * @class PythonEditor::Internal::RustHighlighter
+ * @class RustEditor::Internal::RustHighlighter
  * @brief Handles incremental lexical highlighting, but not semantic
  *
  * Incremental lexical highlighting works every time when any character typed

@@ -4,6 +4,11 @@
 #include "rustsettings.h"
 #include "rusttr.h"
 
+#include "rustrunconfiguration.h"
+
+#include <projectexplorer/runconfiguration.h>
+
+
 #include <coreplugin/generatedfile.h>
 
 #include <utils/algorithm.h>
@@ -83,7 +88,7 @@ RustWizardPage::RustWizardPage(const QList<QPair<QString, QVariant>> &pySideAndD
                                    const int defaultPyside)
 {
     using namespace Layouting;
-    m_interpreter.setSettingsDialogId(Rusty::Constants::C_PYTHONOPTIONS_PAGE_ID);
+    m_interpreter.setSettingsDialogId(Rusty::Constants::C_RUSTOPTIONS_PAGE_ID);
     connect(RustSettings::instance(),
             &RustSettings::interpretersChanged,
             this,
@@ -146,6 +151,8 @@ bool RustWizardPage::validatePage()
     return true;
 }
 
+
+
 void RustWizardPage::setupProject(const JsonWizard::GeneratorFiles &files)
 {
     for (const JsonWizard::GeneratorFile &f : files) {
@@ -173,6 +180,7 @@ void RustWizardPage::setupProject(const JsonWizard::GeneratorFiles &files)
                                                          project ? project->displayName()
                                                                  : QString{});
             }
+
 
             if (project) {
                 project->addTargetForDefaultKit();

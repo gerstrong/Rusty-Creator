@@ -160,8 +160,8 @@ public:
 RustInterpreterAspect::RustInterpreterAspect(AspectContainer *container, RunConfiguration *rc)
     : InterpreterAspect(container), d(new RustInterpreterAspectPrivate(this, rc))
 {
-    setSettingsKey("PythonEditor.RunConfiguation.Interpreter");
-    setSettingsDialogId(Constants::C_PYTHONOPTIONS_PAGE_ID);
+    setSettingsKey("RustEditor.RunConfiguation.Interpreter");
+    setSettingsDialogId(Constants::C_RUSTOPTIONS_PAGE_ID);
 
     updateInterpreters(RustSettings::interpreters());
 
@@ -276,7 +276,7 @@ void RustInterpreterAspectPrivate::currentInterpreterChanged()
             if (document->mimeType() == Constants::C_RS_MIMETYPE
                 || document->mimeType() == Constants::C_TOML_MIMETYPE) {
                 RsLSConfigureAssistant::openDocumentWithPython(rust, document);
-                RsSideInstaller::checkPySideInstallation(rust, document);
+                RsSideInstaller::checkRsSideInstallation(rust, document);
             }
         }
     }
@@ -343,20 +343,20 @@ public:
     RustRunConfiguration(Target *target, Id id)
         : RunConfiguration(target, id)
     {
-        buffered.setSettingsKey("PythonEditor.RunConfiguation.Buffered");
+        buffered.setSettingsKey("RustEditor.RunConfiguation.Buffered");
         buffered.setLabelText(Tr::tr("Buffered output"));
         buffered.setLabelPlacement(BoolAspect::LabelPlacement::AtCheckBox);
         buffered.setToolTip(Tr::tr("Enabling improves output performance, "
                                    "but results in delayed output."));
 
-        mainScript.setSettingsKey("PythonEditor.RunConfiguation.Script");
+        mainScript.setSettingsKey("RustEditor.RunConfiguation.Script");
         mainScript.setLabelText(Tr::tr("Script:"));
         mainScript.setReadOnly(true);
 
         environment.setSupportForBuildEnvironment(target);
 
         executable.setDeviceSelector(target, ExecutableAspect::HostDevice);
-        executable.setSettingsKey("ProjectExplorer.RustRunConfiguration.Executable");
+        executable.setSettingsKey("ProjectExplorer.RustRunConfiguration");
         executable.setReadOnly(false);
         executable.setHistoryCompleter("Qt.CustomExecutable.History");
         executable.setExpectedKind(PathChooser::ExistingCommand);

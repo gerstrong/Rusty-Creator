@@ -51,7 +51,7 @@ public:
     void parse();
     bool save();
 
-    bool writePyProjectFile(const FilePath &filePath, QString &content,
+    bool writeRustProjectFile(const FilePath &filePath, QString &content,
                             const QStringList &rawList, QString *errorMessage);
 
     void triggerParsing() final;
@@ -187,7 +187,7 @@ RustProject::RustProject(const FilePath &fileName)
     : Project(Constants::C_RS_MIMETYPE, fileName)
 {
     setId(RustProjectId);
-    setProjectLanguages(Context(ProjectExplorer::Constants::PYTHON_LANGUAGE_ID));
+    setProjectLanguages(Context(Rusty::Constants::RUST_LANGUAGE_ID));
     setDisplayName(fileName.completeBaseName());
 
     setBuildSystemCreator([](Target *t) { return new RustBuildSystem(t); });
@@ -268,7 +268,7 @@ bool RustBuildSystem::save()
     QByteArray newContents;
 
     // New project file
-    if (filePath.endsWith(".pyproject")) {
+    if (filePath.endsWith(".toml")) {
         expected_str<QByteArray> contents = filePath.fileContents();
         if (contents) {
             QJsonDocument doc = QJsonDocument::fromJson(*contents);
