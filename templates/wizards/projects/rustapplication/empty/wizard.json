@@ -24,6 +24,32 @@
             "typeId": "Project"
         },
         {
+            "trDisplayName": "Define Project Details",
+            "trShortTitle": "Details",
+            "typeId": "RustConfiguration",
+            "data":
+            {
+                "index": 0,
+                "items":
+                [
+                    {
+                        "trKey": "PySide 6",
+                        "value":
+                        {
+                            "PySideVersion": "PySide6"
+                        }
+                    },
+                    {
+                        "trKey": "PySide 2",
+                        "value":
+                        {
+                            "PySideVersion": "PySide2"
+                        }
+                    }
+                ]
+            }
+        },
+        {
             "trDisplayName": "Project Management",
             "trShortTitle": "Summary",
             "typeId": "Summary"

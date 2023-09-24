@@ -24,6 +24,7 @@
 #include <projectexplorer/runconfigurationaspects.h>
 #include <projectexplorer/target.h>
 #include <projectexplorer/taskhub.h>
+#include <projectexplorer/projectexplorerconstants.h>
 
 #include <texteditor/textdocument.h>
 
@@ -327,10 +328,19 @@ void RustInterpreterAspectPrivate::updateExtraCompilers()
 
 // RunConfiguration
 
-class PythonRunConfiguration : public RunConfiguration
+
+const char RUST_EXECUTABLE_RUNCONFIG_ID[] = "ProjectExplorer.RustRunConfiguration";
+
+
+class RustRunConfiguration : public RunConfiguration
 {
 public:
-    PythonRunConfiguration(Target *target, Id id)
+
+    explicit RustRunConfiguration(Target *target)
+        : RustRunConfiguration(target, RUST_EXECUTABLE_RUNCONFIG_ID)
+    {}
+
+    RustRunConfiguration(Target *target, Id id)
         : RunConfiguration(target, id)
     {
         buffered.setSettingsKey("PythonEditor.RunConfiguation.Buffered");
@@ -344,6 +354,13 @@ public:
         mainScript.setReadOnly(true);
 
         environment.setSupportForBuildEnvironment(target);
+
+        executable.setDeviceSelector(target, ExecutableAspect::HostDevice);
+        executable.setSettingsKey("ProjectExplorer.RustRunConfiguration.Executable");
+        executable.setReadOnly(false);
+        executable.setHistoryCompleter("Qt.CustomExecutable.History");
+        executable.setExpectedKind(PathChooser::ExistingCommand);
+        executable.setEnvironment(environment.environment());
 
         arguments.setMacroExpander(macroExpander());
 
@@ -375,17 +392,67 @@ public:
     BoolAspect buffered{this};
     MainScriptAspect mainScript{this};
     EnvironmentAspect environment{this};
+    ExecutableAspect executable{this};
     ArgumentsAspect arguments{this};
     WorkingDirectoryAspect workingDir{this};
+
     TerminalAspect terminal{this};
     X11ForwardingAspect x11Forwarding{this};
+};
+
+static CommandLine rustRunCommand(const Target *target,
+                                const QString &buildKey)
+{
+    if (BuildConfiguration *bc = target->activeBuildConfiguration()) {
+        const Environment env = bc->environment();
+        const FilePath emrun = env.searchInPath("cargo");
+        const FilePath emrunPy = emrun.absolutePath().pathAppended(emrun.baseName() + ".py");
+
+        QStringList args(emrunPy.path());
+        args.append("--port");
+        args.append("--no_emrun_detect");
+        args.append("--serve_after_close");
+
+        return CommandLine("test.exe", args);
+    }
+    return {};
+}
+
+class RustRunWorker : public SimpleTargetRunner
+{
+public:
+    RustRunWorker(RunControl *runControl)
+        : SimpleTargetRunner(runControl)
+    {
+        /*auto portsGatherer = new PortsGatherer(runControl);
+        addStartDependency(portsGatherer);
+
+        setStartModifier([this, runControl, portsGatherer] {
+            const QString browserId =
+                    runControl->aspect<WebBrowserSelectionAspect>()->currentBrowser;
+            setCommandLine(emrunCommand(runControl->target(),
+                                        runControl->buildKey(),
+                                        browserId,
+                                        QString::number(portsGatherer->findEndPoint().port())));
+            setEnvironment(runControl->buildEnvironment());
+        });
+        */
+
+        setStartModifier([this, runControl] {
+            setCommandLine(rustRunCommand(runControl->target(),
+                                          runControl->buildKey()));
+
+            setEnvironment(runControl->buildEnvironment());
+        });
+
+    }
 };
 
 // Factories
 
 RustRunConfigurationFactory::RustRunConfigurationFactory()
 {
-    registerRunConfiguration<PythonRunConfiguration>(Constants::C_RUSTRUNCONFIGURATION_ID);
+    registerRunConfiguration<RustRunConfiguration>(Constants::C_RUSTRUNCONFIGURATION_ID);
     addSupportedProjectType(RustProjectId);
 }
 
@@ -396,6 +463,13 @@ RustOutputFormatterFactory::RustOutputFormatterFactory()
             return {new PythonOutputLineParser};
         return {};
     });
+}
+
+RustRunWorkerFactory::RustRunWorkerFactory()
+{
+    setProduct<RustRunWorker>();
+    addSupportedRunMode(ProjectExplorer::Constants::NORMAL_RUN_MODE);
+    addSupportedRunConfig(Constants::C_RUSTRUNCONFIGURATION_ID);
 }
 
 } // Rusty::Internal

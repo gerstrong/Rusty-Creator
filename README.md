@@ -1,6 +1,6 @@
 # Rusty
 
-This plugins extends QtCreator to support the Rust language
+This plugins extends QtCreator to support the Rust language. The code is basically based on the python plugin that is normally shipped by any QtCreator installation.
 
 ## How to Build
 

@@ -211,7 +211,7 @@ void RsLSClient::openDocument(TextEditor::TextDocument *document)
     using namespace LanguageServerProtocol;
     if (reachable()) {
         const FilePath documentPath = document->filePath();
-        if (RustProject *project = pythonProjectForFile(documentPath)) {
+        if (RustProject *project = rustProjectForFile(documentPath)) {
             if (Target *target = project->activeTarget()) {
                 if (RunConfiguration *rc = target->activeRunConfiguration())
                     if (auto aspect = rc->aspect<RustInterpreterAspect>())

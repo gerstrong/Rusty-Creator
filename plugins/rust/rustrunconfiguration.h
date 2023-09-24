@@ -10,6 +10,7 @@ namespace Rusty::Internal {
 class RsSideUicExtraCompiler;
 class RustRunConfiguration;
 
+
 class RustInterpreterAspect final : public ProjectExplorer::InterpreterAspect
 {
     Q_OBJECT
@@ -21,7 +22,7 @@ public:
     QList<RsSideUicExtraCompiler *> extraCompilers() const;
 
 private:
-    friend class PythonRunConfiguration;
+    friend class RustRunConfiguration;
     class RustInterpreterAspectPrivate *d = nullptr;
 };
 
@@ -37,7 +38,13 @@ public:
     RustOutputFormatterFactory();
 };
 
-} // Rust::Internal
+class RustRunWorkerFactory final : public ProjectExplorer::RunWorkerFactory
+{
+public:
+    RustRunWorkerFactory();
+};
+
+} // Rusty::Internal
 
 
 #endif // RUSTRUNCONFIGURATIONFACTORY_H

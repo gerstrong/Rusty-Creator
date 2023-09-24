@@ -9,7 +9,7 @@ const char MENU_ID[] = "Rusty.Menu";
 const char RUST_LANGUAGE_ID[] = "Rust";
 
 const char C_RUSTEDITOR_ID[] = "RustEditor.RustEditor";
-const char C_RUSTRUNCONFIGURATION_ID[] = "RustEditor.RunConfiguration.";
+const char C_RUSTRUNCONFIGURATION_ID[] = "RustEditor.RunConfiguration.Rustrun";
 
 const char C_EDITOR_DISPLAY_NAME[] = QT_TRANSLATE_NOOP("QtC::Core", "Rust Editor");
 

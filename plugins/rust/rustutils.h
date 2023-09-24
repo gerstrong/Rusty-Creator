@@ -12,7 +12,7 @@ void definePythonForDocument(const Utils::FilePath &documentPath, const Utils::F
 QString pythonName(const Utils::FilePath &pythonPath);
 
 class RustProject;
-RustProject *pythonProjectForFile(const Utils::FilePath &pythonFile);
+RustProject *rustProjectForFile(const Utils::FilePath &pythonFile);
 
 void createVenv(const Utils::FilePath &python,
                 const Utils::FilePath &venvPath,
