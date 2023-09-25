@@ -58,7 +58,7 @@ static QAction *createAction(QObject *parent, ReplType type)
 
     QObject::connect(action, &QAction::triggered, parent, [type, parent] {
         Core::IDocument *doc = Core::EditorManager::currentDocument();
-        openPythonRepl(parent, doc ? doc->filePath() : FilePath(), type);
+        openRustRepl(parent, doc ? doc->filePath() : FilePath(), type);
     });
 
     return action;
@@ -174,7 +174,7 @@ void RustEditorWidget::setUserDefinedPython(const Interpreter &interpreter)
             }
         }
     }
-    definePythonForDocument(textDocument()->filePath(), interpreter.command);
+    defineRustForDocument(textDocument()->filePath(), interpreter.command);
     updateInterpretersSelector();
     rustDocument->checkForRsls();
 

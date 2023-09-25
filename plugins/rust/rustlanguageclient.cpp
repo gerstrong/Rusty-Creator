@@ -371,7 +371,7 @@ void RsLSConfigureAssistant::handlePyLSState(const FilePath &rust,
         && infoBar->canInfoBeAdded(installPylsInfoBarId)) {
         auto message = Tr::tr("Install Python language server (PyLS) for %1 (%2). "
                               "The language server provides Python specific completion and annotation.")
-                           .arg(pythonName(rust), rust.toUserOutput());
+                           .arg(rustName(rust), rust.toUserOutput());
         Utils::InfoBarEntry info(installPylsInfoBarId,
                                  message,
                                  Utils::InfoBarEntry::GlobalSuppression::Enabled);

@@ -27,7 +27,7 @@ static QHash<FilePath, FilePath> &userDefinedPythonsForDocument()
     return userDefines;
 }
 
-FilePath detectPython(const FilePath &documentPath)
+FilePath detectRust(const FilePath &documentPath)
 {
     Project *project = documentPath.isEmpty() ? nullptr
                                               : ProjectManager::projectForFile(documentPath);
@@ -81,7 +81,7 @@ FilePath detectPython(const FilePath &documentPath)
     return RustSettings::interpreters().value(0).command;
 }
 
-void definePythonForDocument(const FilePath &documentPath, const FilePath &python)
+void defineRustForDocument(const FilePath &documentPath, const FilePath &python)
 {
     userDefinedPythonsForDocument()[documentPath] = python;
 }
@@ -103,7 +103,7 @@ static QStringList replImportArgs(const FilePath &pythonFile, ReplType type)
     return {"-c", QString("%1; print('Running \"%1\"')").arg(import)};
 }
 
-void openPythonRepl(QObject *parent, const FilePath &file, ReplType type)
+void openRustRepl(QObject *parent, const FilePath &file, ReplType type)
 {
     Q_UNUSED(parent)
 
@@ -117,7 +117,7 @@ void openPythonRepl(QObject *parent, const FilePath &file, ReplType type)
     };
 
     const auto args = QStringList{"-i"} + replImportArgs(file, type);
-    const FilePath pythonCommand = detectPython(file);
+    const FilePath pythonCommand = detectRust(file);
 
     Process process;
     process.setCommand({pythonCommand, args});
@@ -134,7 +134,7 @@ void openPythonRepl(QObject *parent, const FilePath &file, ReplType type)
     }
 }
 
-QString pythonName(const FilePath &pythonPath)
+QString rustName(const FilePath &pythonPath)
 {
     static QHash<FilePath, QString> nameForPython;
     if (!pythonPath.exists())

@@ -6,10 +6,10 @@
 namespace Rusty::Internal {
 
 enum class ReplType { Unmodified, Import, ImportToplevel };
-void openPythonRepl(QObject *parent, const Utils::FilePath &file, ReplType type);
+void openRustRepl(QObject *parent, const Utils::FilePath &file, ReplType type);
 Utils::FilePath detectRust(const Utils::FilePath &documentPath);
-void definePythonForDocument(const Utils::FilePath &documentPath, const Utils::FilePath &python);
-QString pythonName(const Utils::FilePath &pythonPath);
+void defineRustForDocument(const Utils::FilePath &documentPath, const Utils::FilePath &python);
+QString rustName(const Utils::FilePath &pythonPath);
 
 class RustProject;
 RustProject *rustProjectForFile(const Utils::FilePath &pythonFile);

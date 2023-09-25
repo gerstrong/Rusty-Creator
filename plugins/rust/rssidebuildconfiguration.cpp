@@ -54,9 +54,9 @@ RsSideBuildStep::RsSideBuildStep(BuildStepList *bsl, Id id)
     });
 }
 
-void RsSideBuildStep::updatePySideProjectPath(const FilePath &pySideProjectPath)
+void RsSideBuildStep::updateRsSideProjectPath(const FilePath &rsSideProjectPath)
 {
-    m_cargoProject.setValue(pySideProjectPath);
+    m_cargoProject.setValue(rsSideProjectPath);
 }
 
 Tasking::GroupItem RsSideBuildStep::runRecipe()

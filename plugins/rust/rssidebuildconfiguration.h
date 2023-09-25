@@ -12,7 +12,7 @@ class RsSideBuildStep : public ProjectExplorer::AbstractProcessStep
     Q_OBJECT
 public:
     RsSideBuildStep(ProjectExplorer::BuildStepList *bsl, Utils::Id id);
-    void updatePySideProjectPath(const Utils::FilePath &pySideProjectPath);
+    void updateRsSideProjectPath(const Utils::FilePath &rsSideProjectPath);
 
 private:
     Tasking::GroupItem runRecipe() final;

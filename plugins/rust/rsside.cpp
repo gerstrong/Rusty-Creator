@@ -95,7 +95,7 @@ void RsSideInstaller::handleRsSideMissing(const FilePath &python,
     if (!document || !document->infoBar()->canInfoBeAdded(installPySideInfoBarId))
         return;
     const QString message = Tr::tr("%1 installation missing for %2 (%3)")
-                                .arg(pySide, pythonName(python), python.toUserOutput());
+                                .arg(pySide, rustName(python), python.toUserOutput());
     InfoBarEntry info(installPySideInfoBarId, message, InfoBarEntry::GlobalSuppression::Enabled);
     auto installCallback = [=]() { installRsside(python, pySide, document); };
     const QString installTooltip = Tr::tr("Install %1 for %2 using pip package installer.")
