@@ -110,22 +110,22 @@ FilePath getPylsModulePath(CommandLine pylsCommand)
     return {};
 }
 
-static PythonLanguageServerState checkPythonLanguageServer(const FilePath &python)
+static PythonLanguageServerState checkRustLanguageServer(const FilePath &rust)
 {
     using namespace LanguageClient;
-    const CommandLine pythonLShelpCommand(python, {"-m", "pylsp", "-h"});
+    const CommandLine pythonLShelpCommand(rust, {"-m", "pylsp", "-h"});
     const FilePath &modulePath = getPylsModulePath(pythonLShelpCommand);
 
-    Process pythonProcess;
-    pythonProcess.setTimeoutS(2);
-    pythonProcess.setCommand(pythonLShelpCommand);
-    pythonProcess.runBlocking();
-    if (pythonProcess.allOutput().contains("Python Language Server"))
+    Process rustProcess;
+    rustProcess.setTimeoutS(2);
+    rustProcess.setCommand(pythonLShelpCommand);
+    rustProcess.runBlocking();
+    if (rustProcess.allOutput().contains("Rust Language Server"))
         return {PythonLanguageServerState::AlreadyInstalled, modulePath};
 
-    pythonProcess.setCommand({python, {"-m", "pip", "-V"}});
-    pythonProcess.runBlocking();
-    if (pythonProcess.allOutput().startsWith("pip "))
+    rustProcess.setCommand({rust, {"-m", "pip", "-V"}});
+    rustProcess.runBlocking();
+    if (rustProcess.allOutput().startsWith("pip "))
         return {PythonLanguageServerState::CanBeInstalled, FilePath()};
     else
         return {PythonLanguageServerState::CanNotBeInstalled, FilePath()};
@@ -155,7 +155,7 @@ protected:
     }
 };
 
-RsLSClient *clientForPython(const FilePath &rust)
+RsLSClient *clientForRust(const FilePath &rust)
 {
     if (auto client = pythonClients()[rust])
         return client;
@@ -310,14 +310,14 @@ void RsLSConfigureAssistant::installPythonLanguageServer(const FilePath &python,
     connect(install, &CrateInstallTask::finished, this, [=](const bool success) {
         if (success) {
             if (document) {
-                if (RsLSClient *client = clientForPython(python))
+                if (RsLSClient *client = clientForRust(python))
                     LanguageClientManager::openDocumentWithClient(document, client);
             }
         }
         install->deleteLater();
     });
 
-    install->setPackages({CratePackage{"python-lsp-server[all]", "Python Language Server"}});
+    install->setPackages({CratePackage{"python-lsp-server[all]", "Rust Language Server"}});
     install->run();
 
 }
@@ -355,7 +355,7 @@ void RsLSConfigureAssistant::openDocumentWithPython(const FilePath &python,
                 instance()->handlePyLSState(python, watcher->result(), document);
                 watcher->deleteLater();
             });
-    watcher->setFuture(Utils::asyncRun(&checkPythonLanguageServer, python));
+    watcher->setFuture(Utils::asyncRun(&checkRustLanguageServer, python));
 
 }
 
@@ -369,8 +369,8 @@ void RsLSConfigureAssistant::handlePyLSState(const FilePath &rust,
     Utils::InfoBar *infoBar = document->infoBar();
     if (state.state == PythonLanguageServerState::CanBeInstalled
         && infoBar->canInfoBeAdded(installPylsInfoBarId)) {
-        auto message = Tr::tr("Install Python language server (PyLS) for %1 (%2). "
-                              "The language server provides Python specific completion and annotation.")
+        auto message = Tr::tr("Install Rust language server (PyLS) for %1 (%2). "
+                              "The language server provides Rust specific completion and annotation.")
                            .arg(rustName(rust), rust.toUserOutput());
         Utils::InfoBarEntry info(installPylsInfoBarId,
                                  message,
@@ -380,7 +380,7 @@ void RsLSConfigureAssistant::handlePyLSState(const FilePath &rust,
         infoBar->addInfo(info);
         m_infoBarEntries[rust] << document;
     } else if (state.state == PythonLanguageServerState::AlreadyInstalled) {
-        if (auto client = clientForPython(rust))
+        if (auto client = clientForRust(rust))
             LanguageClientManager::openDocumentWithClient(document, client);
     }
 }

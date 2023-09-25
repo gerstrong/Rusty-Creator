@@ -317,7 +317,7 @@ public:
         setId(Constants::C_RUSTOPTIONS_PAGE_ID);
         setDisplayName(Tr::tr("Interpreters"));
         setCategory(Constants::C_RUST_SETTINGS_CATEGORY);
-        setDisplayCategory(Tr::tr("Python"));
+        setDisplayCategory(Tr::tr("Rust"));
         setCategoryIconPath(":/python/images/settingscategory_Rust.png");
         setWidgetCreator([this] { m_widget = new InterpreterOptionsWidget; return m_widget; });
     }
@@ -404,7 +404,7 @@ public:
         : m_editor(LanguageClient::jsonEditor())
         , m_advancedLabel(new QLabel)
         , m_pluginsGroup(new QGroupBox(Tr::tr("Plugins:")))
-        , m_mainGroup(new QGroupBox(Tr::tr("Use Python Language Server")))
+        , m_mainGroup(new QGroupBox(Tr::tr("Use Rust Language Server")))
 
     {
         m_mainGroup->setCheckable(true);

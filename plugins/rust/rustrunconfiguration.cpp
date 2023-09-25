@@ -252,18 +252,18 @@ void RustInterpreterAspectPrivate::handlePySidePackageInfo(const CratePackageInf
         return {};
     };
 
-    PythonTools pythonTools = findPythonTools(pySideInfo.files, pySideInfo.location, python);
-    if (!pythonTools.pySideProjectPath.isExecutableFile() && requestedPackageName != "PySide6") {
+    PythonTools rustTools = findPythonTools(pySideInfo.files, pySideInfo.location, python);
+    if (!rustTools.pySideProjectPath.isExecutableFile() && requestedPackageName != "PySide6") {
         checkForPySide(python, "PySide6");
         return;
     }
 
-    m_rsSideUicPath = pythonTools.pySideUicPath;
+    m_rsSideUicPath = rustTools.pySideUicPath;
 
     updateExtraCompilers();
 
     if (auto RssideBuildStep = buildSteps->firstOfType<RsSideBuildStep>())
-        RssideBuildStep->updatePySideProjectPath(pythonTools.pySideProjectPath);
+        RssideBuildStep->updateRsSideProjectPath(rustTools.pySideProjectPath);
 }
 
 void RustInterpreterAspectPrivate::currentInterpreterChanged()
