@@ -35,8 +35,6 @@ private:
 
     ProjectExplorer::InterpreterAspect m_interpreter;
     Utils::SelectionAspect m_RsSideVersion;
-    Utils::BoolAspect m_createVenv;
-    Utils::FilePathAspect m_venvPath;
     Utils::InfoLabel *m_stateLabel = nullptr;
 };
 

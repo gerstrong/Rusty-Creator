@@ -101,24 +101,14 @@ RustWizardPage::RustWizardPage(const QList<QPair<QString, QVariant>> &pySideAndD
     if (defaultPyside >= 0)
         m_RsSideVersion.setDefaultValue(defaultPyside);
 
-    m_createVenv.setLabelText(Tr::tr("Create new virtual environment"));
-
-    m_venvPath.setLabelText(Tr::tr("Path to virtual environment:"));
-    m_venvPath.setEnabler(&m_createVenv);
-    m_venvPath.setExpectedKind(PathChooser::Directory);
-
     m_stateLabel = new InfoLabel();
     m_stateLabel->setWordWrap(true);
     m_stateLabel->setFilled(true);
     m_stateLabel->setType(InfoLabel::Error);
-    connect(&m_venvPath, &FilePathAspect::validChanged, this, &RustWizardPage::updateStateLabel);
-    connect(&m_createVenv, &BaseAspect::changed, this, &RustWizardPage::updateStateLabel);
 
     Form {
         m_RsSideVersion, st, br,
         m_interpreter, st, br,
-        m_createVenv, st, br,
-        m_venvPath, br,
         m_stateLabel, br
     }.attachTo(this);
 }
@@ -132,9 +122,6 @@ void RustWizardPage::initializePage()
             Qt::UniqueConnection);
 
     const FilePath projectDir = FilePath::fromString(wiz->property("ProjectDirectory").toString());
-    m_createVenv.setValue(!projectDir.isEmpty());
-    if (m_venvPath().isEmpty())
-        m_venvPath.setValue(projectDir.isEmpty() ? FilePath{} : projectDir / "venv");
 
     updateInterpreters();
     updateStateLabel();
@@ -142,8 +129,6 @@ void RustWizardPage::initializePage()
 
 bool RustWizardPage::validatePage()
 {
-    if (m_createVenv() && !m_venvPath.pathChooser()->isValid())
-        return false;
     auto wiz = qobject_cast<JsonWizard *>(wizard());
     const QMap<QString, QVariant> data = m_RsSideVersion.itemValue().toMap();
     for (auto it = data.begin(), end = data.end(); it != end; ++it)
@@ -160,27 +145,6 @@ void RustWizardPage::setupProject(const JsonWizard::GeneratorFiles &files)
             Interpreter interpreter = m_interpreter.currentInterpreter();
             Project *project = ProjectManager::openProject(Utils::mimeTypeForFile(f.file.filePath()),
                                                            f.file.filePath().absoluteFilePath());
-            if (m_createVenv()) {
-                auto openProjectWithInterpreter = [f](const std::optional<Interpreter> &interpreter) {
-                    if (!interpreter)
-                        return;
-                    Project *project = ProjectManager::projectWithProjectFilePath(f.file.filePath());
-                    if (!project)
-                        return;
-                    if (Target *target = project->activeTarget()) {
-                        if (RunConfiguration *rc = target->activeRunConfiguration()) {
-                            if (auto interpreters = rc->aspect<InterpreterAspect>())
-                                interpreters->setCurrentInterpreter(*interpreter);
-                        }
-                    }
-                };
-                RustSettings::createVirtualEnvironment(m_venvPath(),
-                                                         interpreter,
-                                                         openProjectWithInterpreter,
-                                                         project ? project->displayName()
-                                                                 : QString{});
-            }
-
 
             if (project) {
                 project->addTargetForDefaultKit();
@@ -206,16 +170,7 @@ void RustWizardPage::updateInterpreters()
 
 void RustWizardPage::updateStateLabel()
 {
-    QTC_ASSERT(m_stateLabel, return);
-    if (m_createVenv()) {
-        if (PathChooser *pathChooser = m_venvPath.pathChooser()) {
-            if (!pathChooser->isValid()) {
-                m_stateLabel->show();
-                m_stateLabel->setText(pathChooser->errorMessage());
-                return;
-            }
-        }
-    }
+    QTC_ASSERT(m_stateLabel, return);    
     m_stateLabel->hide();
 }
 
