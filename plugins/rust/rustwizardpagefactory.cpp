@@ -36,18 +36,7 @@ WizardPage *RustWizardPageFactory::create(JsonWizard *wizard, Id typeId, const Q
 
     QTC_ASSERT(canCreate(typeId), return nullptr);
 
-    QList<QPair<QString, QVariant>> pySideAndData;
-    for (const QVariant &item : data.toMap().value("items").toList()) {
-        const QMap<QString, QVariant> map = item.toMap();
-        const QVariant name = map.value("trKey");
-        if (name.isValid())
-            pySideAndData.emplaceBack(QPair<QString, QVariant>{name.toString(), map.value("value")});
-    }
-    bool validIndex = false;
-    int defaultPySide = data.toMap().value("index").toInt(&validIndex);
-    if (!validIndex)
-        defaultPySide = -1;
-    return new RustWizardPage(pySideAndData, defaultPySide);
+    return new RustWizardPage();
 }
 
 static bool validItem(const QVariant &item)
@@ -84,8 +73,7 @@ bool RustWizardPageFactory::validateData(Id typeId, const QVariant &data, QStrin
     return true;
 }
 
-RustWizardPage::RustWizardPage(const QList<QPair<QString, QVariant>> &pySideAndData,
-                                   const int defaultPyside)
+RustWizardPage::RustWizardPage()
 {
     using namespace Layouting;
     m_interpreter.setSettingsDialogId(Rusty::Constants::C_RUSTOPTIONS_PAGE_ID);
@@ -94,20 +82,12 @@ RustWizardPage::RustWizardPage(const QList<QPair<QString, QVariant>> &pySideAndD
             this,
             &RustWizardPage::updateInterpreters);
 
-    m_RsSideVersion.setLabelText(Tr::tr("PySide version:"));
-    m_RsSideVersion.setDisplayStyle(SelectionAspect::DisplayStyle::ComboBox);
-    for (auto [name, data] : pySideAndData)
-        m_RsSideVersion.addOption(SelectionAspect::Option(name, {}, data));
-    if (defaultPyside >= 0)
-        m_RsSideVersion.setDefaultValue(defaultPyside);
-
     m_stateLabel = new InfoLabel();
     m_stateLabel->setWordWrap(true);
     m_stateLabel->setFilled(true);
     m_stateLabel->setType(InfoLabel::Error);
 
     Form {
-        m_RsSideVersion, st, br,
         m_interpreter, st, br,
         m_stateLabel, br
     }.attachTo(this);
@@ -129,14 +109,8 @@ void RustWizardPage::initializePage()
 
 bool RustWizardPage::validatePage()
 {
-    auto wiz = qobject_cast<JsonWizard *>(wizard());
-    const QMap<QString, QVariant> data = m_RsSideVersion.itemValue().toMap();
-    for (auto it = data.begin(), end = data.end(); it != end; ++it)
-        wiz->setValue(it.key(), it.value());
     return true;
 }
-
-
 
 void RustWizardPage::setupProject(const JsonWizard::GeneratorFiles &files)
 {

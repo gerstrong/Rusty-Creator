@@ -24,7 +24,7 @@ public:
 class RustWizardPage : public Utils::WizardPage
 {
 public:
-    RustWizardPage(const QList<QPair<QString, QVariant>> &pySideAndData, const int defaultPyside);
+    RustWizardPage();
     void initializePage() override;
     bool validatePage() override;
 
@@ -34,7 +34,6 @@ private:
     void updateStateLabel();
 
     ProjectExplorer::InterpreterAspect m_interpreter;
-    Utils::SelectionAspect m_RsSideVersion;
     Utils::InfoLabel *m_stateLabel = nullptr;
 };
 
