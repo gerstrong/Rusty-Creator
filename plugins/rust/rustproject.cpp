@@ -406,7 +406,7 @@ QList<RustBuildSystem::FileEntry> RustBuildSystem::processEntries(
     return processed;
 }
 
-Project::RestoreResult RustProject::fromMap(const QVariantMap &map, QString *errorMessage)
+Project::RestoreResult RustProject::fromMap(const Utils::Store &map, QString *errorMessage)
 {
     Project::RestoreResult res = Project::fromMap(map, errorMessage);
     if (res == RestoreResult::Ok) {

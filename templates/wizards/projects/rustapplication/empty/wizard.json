@@ -1,19 +1,19 @@
 {
     "version": 1,
-    "supportedProjectTypes": [ "RustProject" ],
-    "id": "F.RustApplicationEmpty",
-    "category": "F.ApplicationRsSide",
-    "trDescription": "Creates an empty Rust application that contains only the main code for a QApplication.",
-    "trDisplayName": "Empty Application",
+    "supportedProjectTypes": [ "PythonProject" ],
+    "id": "F.QtForPythonApplicationEmpty",
+    "category": "F.ApplicationPySide",
+    "trDescription": "Creates a Qt for Python application that contains only the main code for a QApplication.",
+    "trDisplayName": "Empty Application 2",
     "trDisplayCategory": "Application (Rust)",
     "icon": "icon.png",
     "iconKind": "Themed",
-    "enabled": "%{JS: value('Plugins').indexOf('Rusty') >= 0 && (!value('Platform').length || ['Desktop', 'DockerDeviceType', 'GenericLinuxOsType'].includes(value('Platform')))}",
+    "enabled": "%{JS: value('Plugins').indexOf('Python') >= 0 && (!value('Platform').length || ['Desktop', 'DockerDeviceType', 'GenericLinuxOsType'].includes(value('Platform')))}",
 
     "options":
     [
-        { "key": "SrcFileName", "value": "%{ProjectDirectory}/src/main.rs" },
-        { "key": "RsProjectFile", "value": "%{ProjectDirectory}/Cargo.toml" }
+        { "key": "SrcFileName", "value": "main.py" },
+        { "key": "PyProjectFile", "value": "%{JS: Util.fileName('%{ProjectName}', 'pyproject')}" }
     ],
 
     "pages":
@@ -26,7 +26,7 @@
         {
             "trDisplayName": "Define Project Details",
             "trShortTitle": "Details",
-            "typeId": "RustConfiguration",
+            "typeId": "PythonConfiguration",
             "data":
             {
                 "index": 0,
@@ -37,6 +37,13 @@
                         "value":
                         {
                             "PySideVersion": "PySide6"
+                        }
+                    },
+                    {
+                        "trKey": "PySide 2",
+                        "value":
+                        {
+                            "PySideVersion": "PySide2"
                         }
                     }
                 ]
@@ -55,14 +62,19 @@
             "data":
             [
                 {
-                    "source": "../Cargo.toml",
-                    "target": "%{RsProjectFile}",
+                    "source": "../main.pyproject",
+                    "target": "%{PyProjectFile}",
                     "openAsProject": true
                 },
                 {
-                    "source": "../main.rs",
+                    "source": "../main_empty.py",
                     "target": "%{SrcFileName}",
                     "openInEditor": true
+                },
+                {
+                    "source": "../../git.ignore",
+                    "target": ".gitignore",
+                    "condition": "%{JS: !value('IsSubproject') && value('VersionControl') === 'G.Git'}"
                 }
             ]
         }

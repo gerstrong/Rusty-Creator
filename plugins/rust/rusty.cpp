@@ -101,7 +101,7 @@ bool RustyPlugin::initialize(const QStringList &arguments, QString *errorString)
     ProjectManager::registerProjectType<Rusty::Internal::RustProject>(Rusty::Internal::RustMimeType);
     ProjectManager::registerProjectType<Rusty::Internal::RustProject>(Rusty::Internal::RustMimeTypeLegacy);
     ProjectManager::registerProjectType<Rusty::Internal::RustProject>(Rusty::Internal::CrateMimeType);
-    JsonWizardFactory::registerPageFactory(new Rusty::Internal::RustWizardPageFactory);
+    //JsonWizardFactory::registerPageFactory(new Rusty::Internal::RustWizardPageFactory);
 
 
     return true;

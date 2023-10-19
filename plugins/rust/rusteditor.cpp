@@ -282,7 +282,7 @@ void RustEditorWidget::updateInterpretersSelector()
 RustEditorFactory::RustEditorFactory()
 {
 
-    registerReplAction(this);
+    registerReplAction(&m_guard);
 
     setId(Constants::C_RUSTEDITOR_ID);
     setDisplayName(::Core::Tr::tr(Constants::C_EDITOR_DISPLAY_NAME));

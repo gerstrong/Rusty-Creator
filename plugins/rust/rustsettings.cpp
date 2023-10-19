@@ -562,7 +562,7 @@ void InterpreterOptionsWidget::cleanUp()
 }
 
 constexpr char settingsGroupKey[] = "Python";
-constexpr char interpreterKey[] = "Interpeter";
+constexpr char interpreterKey[] = "Interpreter";
 constexpr char defaultKey[] = "DefaultInterpeter";
 constexpr char pylsEnabledKey[] = "PylsEnabled";
 constexpr char pylsConfigurationKey[] = "PylsConfiguration";
@@ -906,7 +906,7 @@ QList<Interpreter> RustSettings::detectRustVenvs(const FilePath &path)
     return result;
 }
 
-void RustSettings::initFromSettings(QSettings *settings)
+void RustSettings::initFromSettings(Utils::QtcSettings *settings)
 {
     settings->beginGroup(settingsGroupKey);
     const QVariantList interpreters = settings->value(interpreterKey).toList();
@@ -952,7 +952,7 @@ void RustSettings::initFromSettings(QSettings *settings)
     settings->endGroup();
 }
 
-void RustSettings::writeToSettings(QSettings *settings)
+void RustSettings::writeToSettings(QtcSettings *settings)
 {
     settings->beginGroup(settingsGroupKey);
     QVariantList interpretersVar;

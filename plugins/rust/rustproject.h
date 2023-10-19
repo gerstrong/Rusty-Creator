@@ -20,7 +20,7 @@ public:
     bool needsConfiguration() const final { return false; }
 
 private:
-    RestoreResult fromMap(const QVariantMap &map, QString *errorMessage) override;
+    RestoreResult fromMap(const Utils::Store &map, QString *errorMessage) override;
 };
 
 }

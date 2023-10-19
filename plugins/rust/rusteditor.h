@@ -9,6 +9,8 @@ class RustEditorFactory : public TextEditor::TextEditorFactory
 {
 public:
     RustEditorFactory();
+private:
+    QObject m_guard;
 };
 
 } // Rusty::Internal
