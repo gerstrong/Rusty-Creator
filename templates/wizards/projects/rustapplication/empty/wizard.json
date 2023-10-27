@@ -1,8 +1,8 @@
 {
     "version": 1,
     "supportedProjectTypes": [ "RustProject" ],
-    "id": "F.QtForPythonApplicationEmpty",
-    "category": "F.ApplicationPySide",
+    "id": "F.RustApplicationEmpty",
+    "category": "F.ApplicationRust",
     "trDescription": "Creates a Rust application that contains only the main code for an Application.",
     "trDisplayName": "Empty Application",
     "trDisplayCategory": "Application (Rust)",
