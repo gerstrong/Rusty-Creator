@@ -12,8 +12,8 @@
 
     "options":
     [
-        { "key": "SrcFileName", "value": "main.py" },
-        { "key": "PyProjectFile", "value": "%{JS: Util.fileName('%{ProjectName}', 'pyproject')}" }
+        { "key": "SrcFileName", "value": "main.rs" },
+        { "key": "PyProjectFile", "value": "%{JS: Util.fileName('%{ProjectName}', 'Cargo.toml')}" }
     ],
 
     "pages":
