@@ -1,6 +1,6 @@
 {
     "version": 1,
-    "supportedProjectTypes": [ "PythonProject" ],
+    "supportedProjectTypes": [ "RustProject" ],
     "id": "F.QtForPythonApplicationEmpty",
     "category": "F.ApplicationPySide",
     "trDescription": "Creates a Rust application that contains only the main code for an Application.",
@@ -8,7 +8,7 @@
     "trDisplayCategory": "Application (Rust)",
     "icon": "icon.png",
     "iconKind": "Themed",
-    "enabled": "%{JS: value('Plugins').indexOf('Python') >= 0 && (!value('Platform').length || ['Desktop', 'DockerDeviceType', 'GenericLinuxOsType'].includes(value('Platform')))}",
+    "enabled": "%{JS: value('Plugins').indexOf('Rusty') >= 0 && (!value('Platform').length || ['Desktop', 'DockerDeviceType', 'GenericLinuxOsType'].includes(value('Platform')))}",
 
     "options":
     [
