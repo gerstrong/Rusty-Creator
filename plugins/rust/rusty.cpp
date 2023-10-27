@@ -53,6 +53,7 @@ public:
     RsSideBuildConfigurationFactory buildConfigFactory;
     SimpleTargetRunnerFactory runWorkerFactory{{runConfigFactory.runConfigurationId()}};
     RustSettings settings;
+    RustWizardPageFactory rustWizardOageFactory;
 };
 
 

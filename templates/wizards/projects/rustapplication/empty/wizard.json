@@ -13,7 +13,7 @@
     "options":
     [
         { "key": "SrcFileName", "value": "main.rs" },
-        { "key": "PyProjectFile", "value": "%{JS: Util.fileName('%{ProjectName}', 'Cargo.toml')}" }
+        { "key": "RustProjectFile", "value": "%{JS: Util.fileName('%{ProjectName}', 'Cargo.toml')}" }
     ],
 
     "pages":
@@ -26,7 +26,7 @@
         {
             "trDisplayName": "Define Project Details",
             "trShortTitle": "Details",
-            "typeId": "PythonConfiguration",
+            "typeId": "RustConfiguration",
             "data":
             {
                 "index": 0,
@@ -62,12 +62,12 @@
             "data":
             [
                 {
-                    "source": "../main.pyproject",
-                    "target": "%{PyProjectFile}",
+                    "source": "../Cargo.toml",
+                    "target": "%{RustProjectFile}",
                     "openAsProject": true
                 },
                 {
-                    "source": "../main_empty.py",
+                    "source": "../main_empty.rs",
                     "target": "%{SrcFileName}",
                     "openInEditor": true
                 },
