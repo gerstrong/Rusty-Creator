@@ -12,8 +12,8 @@
 
     "options":
     [
-        { "key": "SrcFileName", "value": "main.rs" },
-        { "key": "RustProjectFile", "value": "%{JS: Util.fileName('%{ProjectName}', 'Cargo.toml')}" }
+        { "key": "SrcFileName", "value": "src/main.rs" },
+        { "key": "RustProjectFile", "value": "%{JS: Util.fileName('Cargo.toml')}" }
     ],
 
     "pages":

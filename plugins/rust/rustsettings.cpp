@@ -561,8 +561,8 @@ void InterpreterOptionsWidget::cleanUp()
     updateCleanButton();
 }
 
-constexpr char settingsGroupKey[] = "Python";
-constexpr char runnerKey[] = "Runners";
+constexpr char settingsGroupKey[] = "Rust";
+constexpr char runnerKey[] = "RustRunner";
 constexpr char defaultKey[] = "DefaultInterpeter";
 constexpr char pylsEnabledKey[] = "PylsEnabled";
 constexpr char pylsConfigurationKey[] = "PylsConfiguration";
@@ -664,47 +664,39 @@ static void addPythonsFromRegistry(QList<Interpreter> &rusts)
     }
 }
 
-static void addPythonsFromPath(QList<Interpreter> &pythons)
+static void addPythonsFromPath(QList<Interpreter> &rust)
 {
     if (HostOsInfo::isWindowsHost()) {
-        for (const FilePath &executable : FilePath("python").searchAllInPath()) {
+        for (const FilePath &executable : FilePath("rustc").searchAllInPath()) {
             // Windows creates empty redirector files that may interfere
             if (executable.toFileInfo().size() == 0)
                 continue;
-            if (executable.exists() && !alreadyRegistered(pythons, executable))
-                pythons << createInterpreter(executable, "Python from Path");
-        }
-        for (const FilePath &executable : FilePath("pythonw").searchAllInPath()) {
-            if (executable.exists() && !alreadyRegistered(pythons, executable))
-                pythons << createInterpreter(executable, "Python from Path", "(Windowed)");
+            if (executable.exists() && !alreadyRegistered(rust, executable))
+                rust << createInterpreter(executable, "Rust from Path");
         }
     } else {
-        const QStringList filters = {"python",
-                                     "python[1-9].[0-9]",
-                                     "python[1-9].[1-9][0-9]",
-                                     "python[1-9]"};
+        const QStringList filters = {"rustc",
+                                     "rustc[1-9].[0-9]",
+                                     "rustc[1-9].[1-9][0-9]",
+                                     "rustc[1-9]"};
         const FilePaths dirs = Environment::systemEnvironment().path();
         for (const FilePath &path : dirs) {
             const QDir dir(path.toString());
             for (const QFileInfo &fi : dir.entryInfoList(filters)) {
                 const FilePath executable = Utils::FilePath::fromFileInfo(fi);
-                if (executable.exists() && !alreadyRegistered(pythons, executable))
-                    pythons << createInterpreter(executable, "Python from Path");
+                if (executable.exists() && !alreadyRegistered(rust, executable))
+                    rust << createInterpreter(executable, "Rust from Path");
             }
         }
     }
 }
 
-static QString idForPythonFromPath(const QList<Interpreter> &pythons)
+static QString idForRustFromPath(const QList<Interpreter> &rusts)
 {
-    FilePath pythonFromPath = FilePath("python3").searchInPath();
-    if (pythonFromPath.isEmpty())
-        pythonFromPath = FilePath("python").searchInPath();
-    if (pythonFromPath.isEmpty())
-        return {};
+    FilePath rustcFromPath = FilePath("rustc").searchInPath();
     const Interpreter &defaultInterpreter
-        = findOrDefault(pythons, [pythonFromPath](const Interpreter &interpreter) {
-              return interpreter.command == pythonFromPath;
+        = findOrDefault(rusts, [rustcFromPath](const Interpreter &interpreter) {
+              return interpreter.command == rustcFromPath;
           });
     return defaultInterpreter.id;
 }
@@ -726,7 +718,7 @@ RustSettings::RustSettings()
     addPythonsFromPath(m_interpreters);
 
     if (m_defaultInterpreterId.isEmpty())
-        m_defaultInterpreterId = idForPythonFromPath(m_interpreters);
+        m_defaultInterpreterId = idForRustFromPath(m_interpreters);
 
     writeToSettings(Core::ICore::settings());
 
