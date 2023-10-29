@@ -562,7 +562,7 @@ void InterpreterOptionsWidget::cleanUp()
 }
 
 constexpr char settingsGroupKey[] = "Python";
-constexpr char interpreterKey[] = "Interpreter";
+constexpr char runnerKey[] = "Runners";
 constexpr char defaultKey[] = "DefaultInterpeter";
 constexpr char pylsEnabledKey[] = "PylsEnabled";
 constexpr char pylsConfigurationKey[] = "PylsConfiguration";
@@ -716,7 +716,7 @@ RustSettings::RustSettings()
     QTC_ASSERT(!settingsInstance, return);
     settingsInstance = this;
 
-    setObjectName("PythonSettings");
+    setObjectName("RustSettings");
     ExtensionSystem::PluginManager::addObject(this);
 
     initFromSettings(Core::ICore::settings());
@@ -909,7 +909,7 @@ QList<Interpreter> RustSettings::detectRustVenvs(const FilePath &path)
 void RustSettings::initFromSettings(Utils::QtcSettings *settings)
 {
     settings->beginGroup(settingsGroupKey);
-    const QVariantList interpreters = settings->value(interpreterKey).toList();
+    const QVariantList interpreters = settings->value(runnerKey).toList();
     QList<Interpreter> oldSettings;
     for (const QVariant &interpreterVar : interpreters) {
         auto interpreterList = interpreterVar.toList();
@@ -964,7 +964,7 @@ void RustSettings::writeToSettings(QtcSettings *settings)
         interpreterVar.append(interpreter.autoDetected);
         interpretersVar.append(QVariant(interpreterVar)); // new settings
     }
-    settings->setValue(interpreterKey, interpretersVar);
+    settings->setValue(runnerKey, interpretersVar);
     settings->setValue(defaultKey, m_defaultInterpreterId);
     settings->setValue(pylsConfigurationKey, m_pylsConfiguration);
     settings->setValue(pylsEnabledKey, m_pylsEnabled);
