@@ -114,17 +114,23 @@ bool RustWizardPage::validatePage()
 
 void RustWizardPage::setupProject(const JsonWizard::GeneratorFiles &files)
 {
-    for (const JsonWizard::GeneratorFile &f : files) {
-        if (f.file.attributes() & Core::GeneratedFile::OpenProjectAttribute) {
+    for (const JsonWizard::GeneratorFile &f : files)
+    {
+        if (f.file.attributes() & Core::GeneratedFile::OpenProjectAttribute)
+        {
             Interpreter interpreter = m_interpreter.currentInterpreter();
             Project *project = ProjectManager::openProject(Utils::mimeTypeForFile(f.file.filePath()),
                                                            f.file.filePath().absoluteFilePath());
 
-            if (project) {
+            if (project)
+            {
                 project->addTargetForDefaultKit();
-                if (Target *target = project->activeTarget()) {
-                    if (RunConfiguration *rc = target->activeRunConfiguration()) {
-                        if (auto interpreters = rc->aspect<InterpreterAspect>()) {
+                if (Target *target = project->activeTarget())
+                {
+                    if (RunConfiguration *rc = target->activeRunConfiguration())
+                    {
+                        if (auto interpreters = rc->aspect<InterpreterAspect>())
+                        {
                             interpreters->setCurrentInterpreter(interpreter);
                             project->saveSettings();
                         }

@@ -70,11 +70,7 @@ FilePath detectRust(const FilePath &documentPath)
         return FilePath();
     };
 
-    const FilePath fromPath3 = pythonFromPath("python3");
-    if (fromPath3.exists())
-        return fromPath3;
-
-    const FilePath fromPath = pythonFromPath("python");
+    const FilePath fromPath = pythonFromPath("rustc");
     if (fromPath.exists())
         return fromPath;
 

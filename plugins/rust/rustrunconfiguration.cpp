@@ -130,7 +130,7 @@ public:
         connect(RsSideInstaller::instance(), &RsSideInstaller::rsSideInstalled, this,
                 [this](const FilePath &python) {
                     if (python == q->currentInterpreter().command)
-                        checkForPySide(python);
+                        checkForCargo(python);
                 }
         );
 
@@ -140,8 +140,8 @@ public:
 
     ~RustInterpreterAspectPrivate() { qDeleteAll(m_extraCompilers); }
 
-    void checkForPySide(const FilePath &python);
-    void checkForPySide(const FilePath &rust, const QString &rsSidePackageName);
+    void checkForCargo(const FilePath &cargo);
+    void checkForCargo(const FilePath &cargo, const QString &rsSidePackageName);
     void handlePySidePackageInfo(const CratePackageInfo &pySideInfo,
                                  const FilePath &python,
                                  const QString &requestedPackageName);
@@ -192,31 +192,31 @@ RustInterpreterAspect::~RustInterpreterAspect()
     delete d;
 }
 
-void RustInterpreterAspectPrivate::checkForPySide(const FilePath &python)
+void RustInterpreterAspectPrivate::checkForCargo(const FilePath &cargo)
 {
-    checkForPySide(python, "PySide6-Essentials");
+    checkForCargo(cargo, "cargo");
 }
 
-void RustInterpreterAspectPrivate::checkForPySide(const FilePath &rust,
+void RustInterpreterAspectPrivate::checkForCargo(const FilePath &cargo,
                                                     const QString &rsSidePackageName)
 {
     const CratePackage package(rsSidePackageName);
     QObject::disconnect(m_watcherConnection);
     m_watcherConnection = QObject::connect(&m_watcher, &QFutureWatcherBase::finished, q, [=] {
-        handlePySidePackageInfo(m_watcher.result(), rust, rsSidePackageName);
+        handlePySidePackageInfo(m_watcher.result(), cargo, rsSidePackageName);
     });
-    const auto future = Crate::instance(rust)->info(package);
+    const auto future = Crate::instance(cargo)->info(package);
     m_watcher.setFuture(future);
     ExtensionSystem::PluginManager::futureSynchronizer()->addFuture(future);
 }
 
 void RustInterpreterAspectPrivate::handlePySidePackageInfo(const CratePackageInfo &pySideInfo,
-                                                             const FilePath &python,
+                                                             const FilePath &rust,
                                                              const QString &requestedPackageName)
 {
-    struct PythonTools
+    struct RustTools
     {
-        FilePath pySideProjectPath;
+        FilePath cargoProjectPath;
         FilePath pySideUicPath;
     };
 
@@ -228,33 +228,31 @@ void RustInterpreterAspectPrivate::handlePySidePackageInfo(const CratePackageInf
     if (!buildSteps)
         return;
 
-    const auto findPythonTools = [](const FilePaths &files,
+    const auto findRustTools = [](const FilePaths &files,
                                     const FilePath &location,
-                                    const FilePath &rust) -> PythonTools {
-        PythonTools result;
-        const QString pySide6ProjectName
-            = OsSpecificAspects::withExecutableSuffix(rust.osType(), "pyside6-project");
-        const QString pySide6UicName
-            = OsSpecificAspects::withExecutableSuffix(rust.osType(), "pyside6-uic");
+                                    const FilePath &rust) -> RustTools {
+        RustTools result;
+        const QString cargoExec
+            = OsSpecificAspects::withExecutableSuffix(rust.osType(), "cargo");
+
+        result.cargoProjectPath = FilePath("cargo").searchInPath();
+        return result;
+
         for (const FilePath &file : files) {
-            if (file.fileName() == pySide6ProjectName) {
-                result.pySideProjectPath = rust.withNewMappedPath(location.resolvePath(file));
-                result.pySideProjectPath = result.pySideProjectPath.cleanPath();
+            if (file.fileName() == cargoExec) {
+                result.cargoProjectPath = rust.withNewMappedPath(location.resolvePath(file));
+                result.cargoProjectPath = result.cargoProjectPath.cleanPath();
                 if (!result.pySideUicPath.isEmpty())
-                    return result;
-            } else if (file.fileName() == pySide6UicName) {
-                result.pySideUicPath = rust.withNewMappedPath(location.resolvePath(file));
-                result.pySideUicPath = result.pySideUicPath.cleanPath();
-                if (!result.pySideProjectPath.isEmpty())
                     return result;
             }
         }
         return {};
     };
 
-    PythonTools rustTools = findPythonTools(pySideInfo.files, pySideInfo.location, python);
-    if (!rustTools.pySideProjectPath.isExecutableFile() && requestedPackageName != "PySide6") {
-        checkForPySide(python, "PySide6");
+    //RustTools rustTools = findRustTools(pySideInfo.files, pySideInfo.location, rust);
+    RustTools rustTools = findRustTools(pySideInfo.files, pySideInfo.location, "cargo");
+    if (!rustTools.cargoProjectPath.isExecutableFile() && requestedPackageName != "cargo") {
+        checkForCargo(rust, "cargo");
         return;
     }
 
@@ -263,13 +261,13 @@ void RustInterpreterAspectPrivate::handlePySidePackageInfo(const CratePackageInf
     updateExtraCompilers();
 
     if (auto RssideBuildStep = buildSteps->firstOfType<RsSideBuildStep>())
-        RssideBuildStep->updateRsSideProjectPath(rustTools.pySideProjectPath);
+        RssideBuildStep->updateRsSideProjectPath(rustTools.cargoProjectPath);
 }
 
 void RustInterpreterAspectPrivate::currentInterpreterChanged()
 {
     const FilePath rust = q->currentInterpreter().command;
-    checkForPySide(rust);
+    checkForCargo(rust);
 
     for (FilePath &file : rc->project()->files(Project::AllFiles)) {
         if (auto document = TextEditor::TextDocument::textDocumentForFilePath(file)) {

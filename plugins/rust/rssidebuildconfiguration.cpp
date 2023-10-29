@@ -37,13 +37,15 @@ RsSideBuildStep::RsSideBuildStep(BuildStepList *bsl, Id id)
 {
     m_cargoProject.setSettingsKey("Rust.CargoProjectTool");
     m_cargoProject.setLabelText(Tr::tr("Cargo project tool:"));
-    m_cargoProject.setToolTip(Tr::tr("Enter location of PySide project tool."));
+    m_cargoProject.setToolTip(Tr::tr("Enter location of Cargo project tool."));
     m_cargoProject.setExpectedKind(PathChooser::Command);
     m_cargoProject.setHistoryCompleter("Rust.CargoProjectTool.History");
 
-    const FilePath pySideProjectPath = FilePath("cargo").searchInPath();
-    if (pySideProjectPath.isExecutableFile())
-        m_cargoProject.setValue(pySideProjectPath);
+    const FilePath cargoProjectPath = FilePath("cargo").searchInPath();
+    if (cargoProjectPath.isExecutableFile())
+        m_cargoProject.setValue(cargoProjectPath);
+
+    QString str(m_cargoProject.value());
 
     setCommandLineProvider([this] { return CommandLine(m_cargoProject(), {"build"}); });
     setWorkingDirectoryProvider([this] {
