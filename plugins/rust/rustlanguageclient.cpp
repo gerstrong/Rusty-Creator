@@ -52,7 +52,7 @@ using namespace Utils;
 
 namespace Rusty::Internal {
 
-static constexpr char installPylsInfoBarId[] = "Python::InstallPyls";
+static constexpr char installPylsInfoBarId[] = "Rusty::InstallPyls";
 
 class PythonLanguageServerState
 {
@@ -322,7 +322,7 @@ void RsLSConfigureAssistant::installPythonLanguageServer(const FilePath &python,
 
 }
 
-void RsLSConfigureAssistant::openDocumentWithPython(const FilePath &python,
+void RsLSConfigureAssistant::openDocumentWithRustC(const FilePath &rustc,
                                                     TextEditor::TextDocument *document)
 {
 
@@ -330,7 +330,7 @@ void RsLSConfigureAssistant::openDocumentWithPython(const FilePath &python,
     if (!RustSettings::pylsEnabled())
         return;
 
-    if (auto client = pythonClients().value(python)) {
+    if (auto client = pythonClients().value(rustc)) {
         LanguageClientManager::openDocumentWithClient(document, client);
         return;
     }
@@ -352,10 +352,10 @@ void RsLSConfigureAssistant::openDocumentWithPython(const FilePath &python,
             [=, document = QPointer<TextEditor::TextDocument>(document)]() {
                 if (!document || !watcher)
                     return;
-                instance()->handlePyLSState(python, watcher->result(), document);
+                instance()->handlePyLSState(rustc, watcher->result(), document);
                 watcher->deleteLater();
             });
-    watcher->setFuture(Utils::asyncRun(&checkRustLanguageServer, python));
+    watcher->setFuture(Utils::asyncRun(&checkRustLanguageServer, rustc));
 
 }
 

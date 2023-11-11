@@ -17,7 +17,7 @@ class RsSideInstaller : public QObject
 
 public:
     static RsSideInstaller *instance();
-    static void checkRsSideInstallation(const Utils::FilePath &python,
+    static void checkRsSideInstallation(const Utils::FilePath &rustc,
                                         TextEditor::TextDocument *document);
 
 signals:

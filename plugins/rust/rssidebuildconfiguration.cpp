@@ -107,4 +107,4 @@ RsSideBuildConfigurationFactory::RsSideBuildConfigurationFactory()
     });
 }
 
-} // Python::Internal
+} // Rusty::Internal

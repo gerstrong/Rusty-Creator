@@ -91,20 +91,20 @@ public:
                         return;
                     const FilePath &rust = detectRust(filePath());
                     if (rust.exists())
-                        RsLSConfigureAssistant::openDocumentWithPython(rust, this);
+                        RsLSConfigureAssistant::openDocumentWithRustC(rust, this);
                 });
         connect(this, &RustDocument::openFinishedSuccessfully,
-                this, &RustDocument::checkForRsls);
+                this, &RustDocument::checkForRustC);
     }
 
-    void checkForRsls()
+    void checkForRustC()
     {
 
         const FilePath &rust = detectRust(filePath());
         if (!rust.exists())
             return;
 
-        RsLSConfigureAssistant::openDocumentWithPython(rust, this);
+        RsLSConfigureAssistant::openDocumentWithRustC(rust, this);
         RsSideInstaller::checkRsSideInstallation(rust, this);
     }
 };
@@ -176,7 +176,7 @@ void RustEditorWidget::setUserDefinedPython(const Interpreter &interpreter)
     }
     defineRustForDocument(textDocument()->filePath(), interpreter.command);
     updateInterpretersSelector();
-    rustDocument->checkForRsls();
+    rustDocument->checkForRustC();
 
 }
 

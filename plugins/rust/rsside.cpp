@@ -34,13 +34,13 @@ RsSideInstaller *RsSideInstaller::instance()
     return instance;
 }
 
-void RsSideInstaller::checkRsSideInstallation(const FilePath &python,
+void RsSideInstaller::checkRsSideInstallation(const FilePath &rustc,
                                               TextEditor::TextDocument *document)
 {
     document->infoBar()->removeInfo(installPySideInfoBarId);
     const QString pySide = importedRsSide(document->plainText());
     if (pySide == "PySide2" || pySide == "PySide6")
-        instance()->runRsSideChecker(python, pySide, document);
+        instance()->runRsSideChecker(rustc, pySide, document);
 }
 
 bool RsSideInstaller::missingRsSideInstallation(const FilePath &pythonPath,

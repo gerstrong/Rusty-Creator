@@ -232,7 +232,7 @@ void RustBuildSystem::triggerParsing()
             bti.buildKey = entry.filePath.toString();
             bti.targetFilePath = entry.filePath;
             bti.projectFilePath = projectFile;
-            bti.isQtcRunnable = entry.filePath.fileName() == "main.py";
+            bti.isQtcRunnable = entry.filePath.fileName() == "main.rs";
             appTargets.append(bti);
         }
     }
@@ -387,8 +387,8 @@ static void expandEnvironmentVariables(const Environment &env, QString &string)
  * Expands environment variables and converts the path from relative to the
  * project to an absolute path for all given raw paths
  */
-QList<RustBuildSystem::FileEntry> RustBuildSystem::processEntries(
-    const QStringList &rawPaths) const
+QList<RustBuildSystem::FileEntry>
+RustBuildSystem::processEntries(const QStringList &rawPaths) const
 {
     QList<FileEntry> processed;
     const FilePath projectDir = projectDirectory();

@@ -249,7 +249,6 @@ void RustInterpreterAspectPrivate::handlePySidePackageInfo(const CratePackageInf
         return {};
     };
 
-    //RustTools rustTools = findRustTools(pySideInfo.files, pySideInfo.location, rust);
     RustTools rustTools = findRustTools(pySideInfo.files, pySideInfo.location, "cargo");
     if (!rustTools.cargoProjectPath.isExecutableFile() && requestedPackageName != "cargo") {
         checkForCargo(rust, "cargo");
@@ -273,7 +272,7 @@ void RustInterpreterAspectPrivate::currentInterpreterChanged()
         if (auto document = TextEditor::TextDocument::textDocumentForFilePath(file)) {
             if (document->mimeType() == Constants::C_RS_MIMETYPE
                 || document->mimeType() == Constants::C_TOML_MIMETYPE) {
-                RsLSConfigureAssistant::openDocumentWithPython(rust, document);
+                RsLSConfigureAssistant::openDocumentWithRustC(rust, document);
                 RsSideInstaller::checkRsSideInstallation(rust, document);
             }
         }
@@ -400,7 +399,7 @@ static CommandLine rustRunCommand(const Target *target,
     if (BuildConfiguration *bc = target->activeBuildConfiguration()) {
         const Environment env = bc->environment();
         const FilePath emrun = env.searchInPath("cargo");
-        const FilePath emrunPy = emrun.absolutePath().pathAppended(emrun.baseName() + ".py");
+        const FilePath emrunPy = emrun.absolutePath().pathAppended(emrun.baseName() + ".rs");
 
         QStringList args(emrunPy.path());
         args.append("--port");

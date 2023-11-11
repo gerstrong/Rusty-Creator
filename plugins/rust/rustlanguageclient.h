@@ -54,7 +54,7 @@ public:
 
     static void updateEditorInfoBars(const Utils::FilePath &python,
                                      LanguageClient::Client *client);
-    static void openDocumentWithPython(const Utils::FilePath &python,
+    static void openDocumentWithRustC(const Utils::FilePath &python,
                                        TextEditor::TextDocument *document);
 
 private:
