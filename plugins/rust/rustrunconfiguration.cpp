@@ -340,18 +340,7 @@ public:
     RustRunConfiguration(Target *target, Id id)
         : RunConfiguration(target, id)
     {
-        mainScript.setSettingsKey("RustEditor.RunConfiguation.Script");
-        mainScript.setLabelText(Tr::tr("Script:"));
-        mainScript.setReadOnly(true);
-
         environment.setSupportForBuildEnvironment(target);
-
-        executable.setDeviceSelector(target, ExecutableAspect::HostDevice);
-        executable.setSettingsKey("ProjectExplorer.RustRunConfiguration");
-        executable.setReadOnly(false);
-        executable.setHistoryCompleter("Qt.CustomExecutable.History");
-        executable.setExpectedKind(PathChooser::ExistingCommand);
-        executable.setEnvironment(environment.environment());
 
         arguments.setMacroExpander(macroExpander());
 
@@ -367,7 +356,6 @@ public:
         setUpdater([this] {
             const BuildTargetInfo bti = buildTargetInfo();
             setDefaultDisplayName(Tr::tr("Run %1").arg(bti.targetFilePath.toUserOutput()));
-            mainScript.setValue(bti.targetFilePath);
             const auto projectDir = bti.projectFilePath.parentDir();
             workingDir.setDefaultWorkingDirectory(projectDir);
         });
@@ -376,9 +364,7 @@ public:
     }
 
     RustInterpreterAspect interpreter{this, this};
-    MainScriptAspect mainScript{this};
     EnvironmentAspect environment{this};
-    ExecutableAspect executable{this};
     ArgumentsAspect arguments{this};
     WorkingDirectoryAspect workingDir{this};
 
