@@ -364,9 +364,6 @@ public:
 
         workingDir.setMacroExpander(macroExpander());
 
-        x11Forwarding.setMacroExpander(macroExpander());
-        x11Forwarding.setVisible(HostOsInfo::isAnyUnixHost());
-
         setCommandLineGetter([this] {
             CommandLine cmd{interpreter.currentInterpreter().command};
             if (!buffered())
@@ -395,7 +392,6 @@ public:
     WorkingDirectoryAspect workingDir{this};
 
     TerminalAspect terminal{this};
-    X11ForwardingAspect x11Forwarding{this};
 };
 
 static CommandLine rustRunCommand(const Target *target,
