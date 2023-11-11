@@ -7,7 +7,7 @@ namespace Rusty::Internal {
 
 enum class ReplType { Unmodified, Import, ImportToplevel };
 void openRustRepl(QObject *parent, const Utils::FilePath &file, ReplType type);
-Utils::FilePath detectRust(const Utils::FilePath &documentPath);
+Utils::FilePath detectCargo(const Utils::FilePath &documentPath);
 void defineRustForDocument(const Utils::FilePath &documentPath, const Utils::FilePath &python);
 QString rustName(const Utils::FilePath &pythonPath);
 

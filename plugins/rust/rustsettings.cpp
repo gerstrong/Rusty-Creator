@@ -626,6 +626,8 @@ static void disableOutdatedPyls()
 
 static void addPythonsFromRegistry(QList<Interpreter> &rusts)
 {
+    // TODO: Windows only stuff. I am not sure, if cargo is registered in the registry by default. We need to check that...
+    /*
     QSettings pythonRegistry("HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore",
                              QSettings::NativeFormat);
     for (const QString &versionGroup : pythonRegistry.childGroups()) {
@@ -662,27 +664,34 @@ static void addPythonsFromRegistry(QList<Interpreter> &rusts)
         }
         pythonRegistry.endGroup();
     }
+    */
 }
 
 static void addPythonsFromPath(QList<Interpreter> &rust)
 {
-    if (HostOsInfo::isWindowsHost()) {
-        for (const FilePath &executable : FilePath("rustc").searchAllInPath()) {
+    if (HostOsInfo::isWindowsHost())
+    {
+        for (const FilePath &executable : FilePath("cargo").searchAllInPath())
+        {
             // Windows creates empty redirector files that may interfere
             if (executable.toFileInfo().size() == 0)
                 continue;
             if (executable.exists() && !alreadyRegistered(rust, executable))
-                rust << createInterpreter(executable, "Rust from Path");
+                rust << createInterpreter(executable, "Cargo from Path");
         }
-    } else {
-        const QStringList filters = {"rustc",
-                                     "rustc[1-9].[0-9]",
-                                     "rustc[1-9].[1-9][0-9]",
-                                     "rustc[1-9]"};
+    }
+    else
+    {
+        const QStringList filters = {"cargo",
+                                     "cargo[1-9].[0-9]",
+                                     "cargo[1-9].[1-9][0-9]",
+                                     "cargo[1-9]"};
         const FilePaths dirs = Environment::systemEnvironment().path();
-        for (const FilePath &path : dirs) {
+        for (const FilePath &path : dirs)
+        {
             const QDir dir(path.toString());
-            for (const QFileInfo &fi : dir.entryInfoList(filters)) {
+            for (const QFileInfo &fi : dir.entryInfoList(filters))
+            {
                 const FilePath executable = Utils::FilePath::fromFileInfo(fi);
                 if (executable.exists() && !alreadyRegistered(rust, executable))
                     rust << createInterpreter(executable, "Rust from Path");
@@ -693,10 +702,10 @@ static void addPythonsFromPath(QList<Interpreter> &rust)
 
 static QString idForRustFromPath(const QList<Interpreter> &rusts)
 {
-    FilePath rustcFromPath = FilePath("rustc").searchInPath();
+    FilePath cargoFromPath = FilePath("cargo").searchInPath();
     const Interpreter &defaultInterpreter
-        = findOrDefault(rusts, [rustcFromPath](const Interpreter &interpreter) {
-              return interpreter.command == rustcFromPath;
+        = findOrDefault(rusts, [cargoFromPath](const Interpreter &interpreter) {
+              return interpreter.command == cargoFromPath;
           });
     return defaultInterpreter.id;
 }

@@ -89,7 +89,7 @@ public:
                 [this](const bool enabled) {
                     if (!enabled)
                         return;
-                    const FilePath &rust = detectRust(filePath());
+                    const FilePath &rust = detectCargo(filePath());
                     if (rust.exists())
                         RsLSConfigureAssistant::openDocumentWithRustC(rust, this);
                 });
@@ -100,7 +100,7 @@ public:
     void checkForRustC()
     {
 
-        const FilePath &rust = detectRust(filePath());
+        const FilePath &rust = detectCargo(filePath());
         if (!rust.exists())
             return;
 
@@ -227,7 +227,7 @@ void RustEditorWidget::updateInterpretersSelector()
         m_interpreters->setText(text);
     };
 
-    const FilePath currentInterpreterPath = detectRust(textDocument()->filePath());
+    const FilePath currentInterpreterPath = detectCargo(textDocument()->filePath());
     const QList<Interpreter> configuredInterpreters = RustSettings::interpreters();
     auto interpretersGroup = new QActionGroup(menu);
     interpretersGroup->setExclusive(true);

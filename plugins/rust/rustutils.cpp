@@ -27,7 +27,7 @@ static QHash<FilePath, FilePath> &userDefinedPythonsForDocument()
     return userDefines;
 }
 
-FilePath detectRust(const FilePath &documentPath)
+FilePath detectCargo(const FilePath &documentPath)
 {
     Project *project = documentPath.isEmpty() ? nullptr
                                               : ProjectManager::projectForFile(documentPath);
@@ -70,7 +70,7 @@ FilePath detectRust(const FilePath &documentPath)
         return FilePath();
     };
 
-    const FilePath fromPath = pythonFromPath("rustc");
+    const FilePath fromPath = pythonFromPath("cargo");
     if (fromPath.exists())
         return fromPath;
 
@@ -113,7 +113,7 @@ void openRustRepl(QObject *parent, const FilePath &file, ReplType type)
     };
 
     const auto args = QStringList{"-i"} + replImportArgs(file, type);
-    const FilePath pythonCommand = detectRust(file);
+    const FilePath pythonCommand = detectCargo(file);
 
     Process process;
     process.setCommand({pythonCommand, args});
