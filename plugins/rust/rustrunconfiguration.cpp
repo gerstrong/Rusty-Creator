@@ -340,12 +340,6 @@ public:
     RustRunConfiguration(Target *target, Id id)
         : RunConfiguration(target, id)
     {
-        buffered.setSettingsKey("RustEditor.RunConfiguation.Buffered");
-        buffered.setLabelText(Tr::tr("Buffered output"));
-        buffered.setLabelPlacement(BoolAspect::LabelPlacement::AtCheckBox);
-        buffered.setToolTip(Tr::tr("Enabling improves output performance, "
-                                   "but results in delayed output."));
-
         mainScript.setSettingsKey("RustEditor.RunConfiguation.Script");
         mainScript.setLabelText(Tr::tr("Script:"));
         mainScript.setReadOnly(true);
@@ -365,9 +359,7 @@ public:
 
         setCommandLineGetter([this] {
             CommandLine cmd{interpreter.currentInterpreter().command};
-            if (!buffered())
-                cmd.addArg("-u");
-            cmd.addArg(mainScript().fileName());
+            cmd.addArg("run");
             cmd.addArgs(arguments(), CommandLine::Raw);
             return cmd;
         });
@@ -376,14 +368,14 @@ public:
             const BuildTargetInfo bti = buildTargetInfo();
             setDefaultDisplayName(Tr::tr("Run %1").arg(bti.targetFilePath.toUserOutput()));
             mainScript.setValue(bti.targetFilePath);
-            workingDir.setDefaultWorkingDirectory(bti.targetFilePath.parentDir());
+            const auto projectDir = bti.projectFilePath.parentDir();
+            workingDir.setDefaultWorkingDirectory(projectDir);
         });
 
         connect(target, &Target::buildSystemUpdated, this, &RunConfiguration::update);
     }
 
     RustInterpreterAspect interpreter{this, this};
-    BoolAspect buffered{this};
     MainScriptAspect mainScript{this};
     EnvironmentAspect environment{this};
     ExecutableAspect executable{this};
